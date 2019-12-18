@@ -40,6 +40,9 @@ import axios from '../../src/index';
 axios({
   method: 'post',
   url: '/base/post',
+  headers: {
+    'content-type': 'application/json;charset=utf-8'
+  },
   data: {
     a: '11',
     b: '22'
