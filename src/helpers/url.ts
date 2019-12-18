@@ -1,5 +1,5 @@
 
-import { isDate, isObject } from './utils';
+import { isDate, isPlainObject } from './utils';
 
 function encode(val: string): string {
   return encodeURIComponent(val).
@@ -32,7 +32,7 @@ export function buildURL(url: string, params?: any): string {
       if(isDate(val)) {
         // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
         val = val.toISOString();
-      } else if(isObject(val)) {
+      } else if(isPlainObject(val)) {
         val = JSON.stringify(val);
       }
       parts.push(`${encode(key)}=${encode(val)}`)

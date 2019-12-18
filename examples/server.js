@@ -29,6 +29,8 @@ const router = express.Router()
 registerSimpleRouter();
 regiserBaseRouter();
 
+
+
 app.use(router);
 
 const port = process.env.PORT || 3000;
@@ -45,9 +47,25 @@ function registerSimpleRouter() {
 }
 
 function regiserBaseRouter() {
-  router.get('/base/get/', function(req, res) {
+  router.get('/base/get/', function (req, res) {
     res.json({
       msg: 'this is base module'
     })
-  })
+  });
+
+  router.post('/base/post', function (req, res) {
+    res.json(req.body)
+  });
+
+  router.post('/base/buffer', function (req, res) {
+    let msg = [];
+    req.on('data', chunk => {
+      msg.push(chunk);
+    })
+    req.on('end', () => {
+      let buffer = Buffer.concat(msg);
+      res.json(buffer.toJSON());
+    })
+  });
 }
+
