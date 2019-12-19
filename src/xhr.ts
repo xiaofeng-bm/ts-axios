@@ -4,11 +4,26 @@ import { parseData } from './helpers/data';
 
 function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
-    const { data = null, url, method = 'get', headers, responseType } = config;
+    const { 
+      data = null, 
+      url, 
+      method = 'get', 
+      headers, 
+      responseType,
+      timeout,
+    } = config;
 
     const request = new XMLHttpRequest();
 
-    request.open(method.toUpperCase(), url, true);
+    if(responseType) {
+      request.responseType = responseType;
+    }
+
+    if(timeout) {
+      request.timeout = timeout;
+    }
+
+    request.open(method.toUpperCase(), url!, true);
 
     // https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/setRequestHeader
     // 注：必须在open和send之间调用
@@ -17,7 +32,11 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
     })
 
     request.onreadystatechange = function handleLoad() {
-      if (!request || request.readyState !== 4) {
+      if (request.readyState !== 4) {
+        return;
+      }
+
+      if(request.status === 0) {
         return;
       }
 
@@ -33,7 +52,23 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
         request: request
       }
 
-      resolve(response);
+      handleResponse(response);
+    }
+    // 处理请求错误
+    request.onerror = function handleError() {
+      reject(new Error('Network Error'));
+    }
+    // 处理超时
+    request.ontimeout = function handleTimeout() {
+      reject(new Error(`timeout of ${timeout} ms exceeded`))
+    }
+    // 处理非200-300状态码
+    function handleResponse(response: AxiosResponse) {
+      if(response.status >= 200 && response.status < 300) {
+        resolve(response)
+      } else {
+        reject(new Error(`Request failed with status code ${response.status}`))
+      }
     }
 
     request.send(data);
