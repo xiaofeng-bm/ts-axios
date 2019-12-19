@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from './types/index';
+import { AxiosRequestConfig, AxiosPromise } from './types/index';
 import xhr from './xhr';
 import { buildURL } from './helpers/url';
 import { transformRequest } from './helpers/data';
@@ -8,9 +8,9 @@ import { precessHeaders } from './helpers/headers';
  * Create a new instance of Axios
  * @param {Object} config The default config for the instance 
  */
-function Axios(config: AxiosRequestConfig): void {
+function Axios(config: AxiosRequestConfig): AxiosPromise {
   processConfig(config);
-  xhr(config);
+  return xhr(config);
 }
 
 // 统一处理config
