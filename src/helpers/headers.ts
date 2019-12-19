@@ -24,4 +24,20 @@ export function precessHeaders(headers: any, data: any): any {
 }
 
 
+export function parseHeaders(headers: string): object {
+  let parsed = Object.create(null);     // 创建一个纯净的对象（https://juejin.im/post/5acd8ced6fb9a028d444ee4e）;
+
+  headers.split('\r\n').forEach(line => {
+    let [key, val] = line.split(':');
+    
+    if(!key) {
+      return
+    }
+    if(val) {
+      val = val.trim();
+    }
+    parsed[key] = val;
+  })
+  return parsed;
+}
 

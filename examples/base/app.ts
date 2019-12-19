@@ -48,7 +48,7 @@ axios({
     b: '22'
   }
 }).then(response => {
-  console.log(response)
+  console.log(response);
 })
 
 const arr = new Int32Array([11, 22]);
