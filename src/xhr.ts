@@ -1,6 +1,7 @@
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './types/index';
 import { parseHeaders } from './helpers/headers';
 import { parseData } from './helpers/data';
+import { createError } from './helpers/error';
 
 function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
@@ -56,18 +57,37 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
     }
     // 处理请求错误
     request.onerror = function handleError() {
-      reject(new Error('Network Error'));
+      // ECONNABORTED: https://stackoverflow.com/questions/9646550/what-does-econnaborted-mean-when-trying-to-connect-a-socket
+      reject(createError(
+        `Netword Error`, 
+        config, 
+        'ECONNABORTED',
+        request
+      ))
     }
     // 处理超时
     request.ontimeout = function handleTimeout() {
-      reject(new Error(`timeout of ${timeout} ms exceeded`))
+      // reject(new Error(`timeout of ${timeout} ms exceeded`))
+      reject(createError(
+        `timeout of ${config.timeout} ms exceeded`,
+        config,
+        'ECONNABORTED',
+        request
+      ))
     }
     // 处理非200-300状态码
     function handleResponse(response: AxiosResponse) {
       if(response.status >= 200 && response.status < 300) {
         resolve(response)
       } else {
-        reject(new Error(`Request failed with status code ${response.status}`))
+        // reject(new Error(`Request failed with status code ${response.status}`))
+        reject(createError(
+          `Request faied with status code ${response.status}`,
+          config,
+          null,
+          request,
+          response
+        ))
       }
     }
 

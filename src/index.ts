@@ -15,10 +15,12 @@ function Axios(config: AxiosRequestConfig): AxiosPromise {
 
 // 统一处理config
 function processConfig(config: AxiosRequestConfig) {
-  const { headers={}, url, params, data } = config;
+  const { headers={}, url='', params, data } = config;
   config.url = buildURL(url, params);
   config.data = transformRequest(data);
   config.headers = precessHeaders(headers, data);
 }
+
+export * from  './types';
 
 export default Axios;
