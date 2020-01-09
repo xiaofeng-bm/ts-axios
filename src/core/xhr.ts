@@ -1,7 +1,7 @@
-import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './types/index';
-import { parseHeaders } from './helpers/headers';
-import { parseData } from './helpers/data';
-import { createError } from './helpers/error';
+import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types/index';
+import { parseHeaders } from '../helpers/headers';
+import { parseData } from '../helpers/data';
+import { createError } from '../helpers/error';
 
 function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {

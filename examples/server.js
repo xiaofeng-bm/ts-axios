@@ -29,6 +29,7 @@ const router = express.Router()
 registerSimpleRouter();
 regiserBaseRouter();
 regiserErrorRouter();
+regiserExtendROuter();
 
 
 
@@ -89,4 +90,16 @@ function regiserErrorRouter() {
       })
     }, 5000);
   })
+}
+
+function regiserExtendROuter() {
+  router.post('/extend/post', function (req, res) {
+    res.json(req.body)
+  });
+  router.get('/extend/get', function (req, res) {
+    res.json({
+      success: true,
+      message: 'this is extend get request'
+    })
+  });
 }
