@@ -8,14 +8,21 @@ axios({
   }
 })
 
-axios.get('/extend/get', {
-  params: {
-    a: 10,
-    b: 20
-  }
-})
+// axios.get('/extend/get', {
+//   params: {
+//     a: 10,
+//     b: 20
+//   }
+// })
 
-axios.post('/extend/post', {
-  a: 20,
-  b: 30
+// axios.post('/extend/post', {
+//   a: 20,
+//   b: 30
+// })
+
+axios('/extend/get', {
+  method: 'get',
+  params: {
+    foo: 'bar'
+  }
 })
